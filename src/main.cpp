@@ -6,7 +6,6 @@
 #include <WiFi.h>
 // #include <WiFiNINA_Generic.h>
 const char* WIFI_SSID = "Hydrapeak";
-const char* WIFI_PASSWRD = "Rectal5-Patchy-Everybody";
 
 
 
