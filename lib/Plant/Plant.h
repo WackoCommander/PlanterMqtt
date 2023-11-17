@@ -3,12 +3,7 @@
 class Plant
 {
 public:
-    Plant();
-    void SetSoilMoisture(int);
-    void SetTemperature(int);
-    void SetHumidity(int);
+    Plant(std::string name);
 private:
-    int soil_moisture_;
-    int temperature_;
-    int humidity_;
+    std::string name_;
 };
