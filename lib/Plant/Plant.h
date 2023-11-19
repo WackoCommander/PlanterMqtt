@@ -8,7 +8,10 @@ class Plant
 public:
     Plant(std::string name);
     int AttachSensors(int soil_sensor_pin_power, int soil_sensor_pin_reading);
-private:
+    std::string GetName();
+    int GetSoilMoisture();
+protected:
     std::string name_;
+private:
     SoilMoistureSensor sensor_soil_moisture_;
 };

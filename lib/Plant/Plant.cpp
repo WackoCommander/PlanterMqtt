@@ -16,3 +16,9 @@ int Plant::AttachSensors(int soil_sensor_pin_power, int soil_sensor_pin_reading)
     }
     return 1;
 }
+
+
+int Plant::GetSoilMoisture()
+{
+    return sensor_soil_moisture_.GetReading();
+}

@@ -5,6 +5,7 @@
 #include "WifiCreds.h"
 #include "MqttCreds.h"
 #include "Plant.h"
+#include "PlantMqttEntity.h"
 #include <tuple>
 
 /// Global variables
@@ -15,10 +16,12 @@ PubSubClient client(wifi_client);
 int ConnectWifi(std::string wifi_ssid, std::string wifi_password);
 int ConnectMqtt(std::string id, std::string mqtt_server, int mqtt_port, std::string mqtt_user, std::string mqtt_password);
 int CheckTimeOut(int);
+void Callback(char* topic, byte* payload, unsigned int length);
 
 /// List of Plants 
 std::vector<std::tuple<std::string, int, int>> plant_ids = {std::make_tuple("test_plant",2,3)};
-
+std::vector<Plant> plants;
+std::vector<PlantMqttEntity> plants_mqtt_entities;
 
 void setup() {
     Serial.begin(9600);
@@ -42,16 +45,48 @@ void setup() {
       Serial.println("Connection to MQTT server timed out...");
     }
     
-    // Create Plant objects and Connect to Mqtt server    
-    std::vector<Plant> plants;
+    // Create Plant objects 
     for (auto plant_id : plant_ids)
     {
       plants.push_back(Plant(std::get<0>(plant_id)));
       plants.back().AttachSensors(std::get<1>(plant_id), std::get<2>(plant_id));
-    }    
+    }
+
+    // Create Plant Mqtt entity objects
+    for (int i = 0; i < plants.size(), i++)
+    {
+      plants_mqtt_entity.push_back(Plant(&client, plants.at(i)))
+    } 
+
+    // MQTT client configuration.
+    client.setCallback(Callback);           // Setting callback function.
+    client.subscribe("force update");       // Subscribing to MQTT topics. 
 }
 
 void loop() {
+  client.loop();
+}
+
+void Callback(char* topic, byte* payload, unsigned int length)
+{
+  std::string topic = std::string(topic);
+  std::string msg = "Message received on " + topic;
+  Serial.println(msg.c_str());
+  if (topic == "force update")
+  {
+    SendUpdate();
+  }
+  else if 
+  {
+    Serial.println("Unknown topic");
+  }
+  // for (plant : plants)
+  // {
+  //   std::string topic = plant.GetName();
+  //   doc["value_soil_moisture"] = plant.
+  //   client.publish(topic.c_str(), buffer, n);
+
+  // }
 }
 
 int ConnectWifi(std::string wifi_ssid, std::string wifi_password) 
