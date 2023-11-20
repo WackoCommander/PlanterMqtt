@@ -5,9 +5,9 @@
 #include "WifiCreds.h"
 #include "MqttCreds.h"
 #include "Plant.h"
-#include "PlantMqttEntity.h"
+#include "IPAddress.h"
+// #include "PlantMqttEntity.h"
 #include <tuple>
-
 /// Global variables
 WiFiClient wifi_client;
 PubSubClient client(wifi_client);
@@ -21,7 +21,7 @@ void Callback(char* topic, byte* payload, unsigned int length);
 /// List of Plants 
 std::vector<std::tuple<std::string, int, int>> plant_ids = {std::make_tuple("test_plant",2,3)};
 std::vector<Plant> plants;
-std::vector<PlantMqttEntity> plants_mqtt_entities;
+// std::vector<PlantMqttEntity> plants_mqtt_entities;
 
 void setup() {
     Serial.begin(9600);
@@ -53,12 +53,15 @@ void setup() {
     }
 
     // Create Plant Mqtt entity objects
-    for (int i = 0; i < plants.size(), i++)
-    {
-      plants_mqtt_entity.push_back(Plant(&client, plants.at(i)))
-    } 
+    // for (int i = 0; i < plants.size(), i++)
+    // {
+    //   plants_mqtt_entities.push
+    // } 
 
     // MQTT client configuration.
+    // PlantMqttEntity test(client, plants.at(0));
+    client.publish("test_plant", "23");
+    // test.SendSensorValues();
     client.setCallback(Callback);           // Setting callback function.
     client.subscribe("force update");       // Subscribing to MQTT topics. 
 }
@@ -69,17 +72,17 @@ void loop() {
 
 void Callback(char* topic, byte* payload, unsigned int length)
 {
-  std::string topic = std::string(topic);
-  std::string msg = "Message received on " + topic;
-  Serial.println(msg.c_str());
-  if (topic == "force update")
-  {
-    SendUpdate();
-  }
-  else if 
-  {
-    Serial.println("Unknown topic");
-  }
+  // std::string topic_string = std::string(topic);
+  // std::string msg = "Message received on " + topic_string;
+  // Serial.println(msg.c_str());
+  // if (topic == "force update")
+  // {
+  //   SendUpdate();
+  // }
+  // else if 
+  // {
+  //   Serial.println("Unknown topic");
+  // }
   // for (plant : plants)
   // {
   //   std::string topic = plant.GetName();
@@ -108,18 +111,28 @@ int ConnectWifi(std::string wifi_ssid, std::string wifi_password)
 
 int ConnectMqtt(std::string id, std::string mqtt_server, int mqtt_port, std::string mqtt_user, std::string mqtt_password)
 {
-  client.setServer(mqtt_server.c_str(), mqtt_port);
+  Serial.println(mqtt_server.c_str());
+  Serial.println(mqtt_port);
+  // client.setServer(mqtt_server.c_str(), mqtt_port);
+  client.setServer(IPAddress(192,168,1,7), 1883);
   Serial.println("Connecting to MQTT server...");
   int time_elapsed = 0;
-  while (!client.connect(id.c_str(), mqtt_user.c_str(), mqtt_password.c_str()))
+  // while (!client.connect(id.c_str(), mqtt_user.c_str(), mqtt_password.c_str()))
+  // {
+  //   if (CheckTimeOut(time_elapsed))
+  //   {
+  //     return 1;
+  //   }
+  //   time_elapsed = time_elapsed + 500;
+  // }
+  Serial.println(mqtt_user.c_str());
+  Serial.println(mqtt_password.c_str());
+  if (client.connect((id.c_str(), mqtt_user.c_str(), mqtt_password.c_str())))
   {
-    if (CheckTimeOut(time_elapsed))
-    {
-      return 1;
-    }
-    time_elapsed = time_elapsed + 500;
+    Serial.println("Connected...");
+    return 0;
   }
-  return 0;
+  return 1;
 }
 
 int CheckTimeOut(int time_elapsed)
