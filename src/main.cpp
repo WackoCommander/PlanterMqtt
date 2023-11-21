@@ -15,6 +15,7 @@ PubSubClient client(wifi_client);
 int ConnectWifi(std::string wifi_ssid, std::string wifi_password);
 int ConnectMqtt(std::string id, std::string mqtt_server, int mqtt_port, std::string mqtt_user, std::string mqtt_password);
 int CheckTimeOut(int);
+void Callback(char* topic, byte* payload, unsigned int length);
 
 /// List of Plants 
 std::vector<std::tuple<std::string, int, int>> plant_ids = {std::make_tuple("test_plant",2,3)};
@@ -49,10 +50,13 @@ void setup() {
       plants.push_back(Plant(std::get<0>(plant_id)));
       plants.back().AttachSensors(std::get<1>(plant_id), std::get<2>(plant_id));
     }    
-    client.publish("test_plant","test");
+    client.setCallback(Callback);
+    client.subscribe("force_update");
+    client.publish("test_plant","10");
 }
 
 void loop() {
+  client.loop();
 }
 
 int ConnectWifi(std::string wifi_ssid, std::string wifi_password) 
@@ -97,4 +101,10 @@ int CheckTimeOut(int time_elapsed)
     return 1;
   }
   return 0;
+}
+
+void Callback(char* topic, byte* payload, unsigned int length)
+{
+  Serial.println("Called back");
+  client.publish("test_plant","30");
 }
