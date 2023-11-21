@@ -15,4 +15,5 @@ protected:
     std::string name_;
 private:
     SoilMoistureSensor sensor_soil_moisture_;
+    int moisture_;
 };

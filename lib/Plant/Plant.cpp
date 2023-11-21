@@ -20,8 +20,10 @@ int Plant::AttachSensors(int soil_sensor_pin_power, int soil_sensor_pin_reading)
 int Plant::GetSoilMoisture()
 {
     
-    return sensor_soil_moisture_.GetReading();
+    moisture_ = sensor_soil_moisture_.GetReading();
+    return moisture_;
 }
+
 
 std::string Plant::GetName()
 {
