@@ -1,5 +1,5 @@
 #include "SoilMoistureSensor.h"
-
+#include <string>
 SoilMoistureSensor::SoilMoistureSensor()
 {
 
@@ -24,6 +24,7 @@ int SoilMoistureSensor::GetReading()
     digitalWrite(pin_power_, HIGH);             // Turn the sensor on.
     delay(10);                                  // Allow power to settle. 
     int reading = analogRead(pin_reading_);     // Get soil moisture reading. 
+    Serial.println(std::to_string(reading).c_str());
     digitalWrite(pin_power_, LOW);              // Turn the sensor off.
     return reading;
 }
