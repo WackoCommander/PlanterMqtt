@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Arduino.h>
-
-class SoilMoistureSensor
+#include "Sensor.h"
+class SoilMoistureSensor : public Sensor
 {
     public:
         SoilMoistureSensor();
