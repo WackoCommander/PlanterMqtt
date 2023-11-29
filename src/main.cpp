@@ -112,7 +112,9 @@ void Callback(char* topic, byte* payload, unsigned int length)
   for (auto plant : plants)
   {
     std::string moisture_topic = plant.GetName() + "/moisture";
+    std::string temperature_topic = plant.GetName() + "/temperature";
     client.publish(moisture_topic.c_str(), std::to_string(plant.GetSoilMoisture()).c_str());
+    client.publish(temperature_topic.c_str(), std::to_string(plant.GetTemperature()).c_str());
     std::string test = std::to_string(plant.GetTemperature());
     Serial.println(test.c_str());
   }
