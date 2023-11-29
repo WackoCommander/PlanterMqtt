@@ -19,7 +19,7 @@ void Callback(char* topic, byte* payload, unsigned int length);
 void UpdateSensors();
 
 /// List of Plants 
-std::vector<std::tuple<std::string, int, int>> plant_ids = {std::make_tuple("test_plant",2,3)};
+std::vector<std::tuple<std::string, int, int, int>> plant_ids = {std::make_tuple("test_plant",2,3,12)};
 std::vector<Plant> plants;
 
 
@@ -49,7 +49,7 @@ void setup() {
     for (auto plant_id : plant_ids)
     {
       plants.push_back(Plant(std::get<0>(plant_id)));
-      plants.back().AttachSensors(std::get<1>(plant_id), std::get<2>(plant_id));
+      plants.back().AttachSensors(std::get<1>(plant_id), std::get<2>(plant_id), std::get<3>(plant_id));
     }    
     client.setCallback(Callback);
     client.subscribe("force_update");
@@ -113,6 +113,8 @@ void Callback(char* topic, byte* payload, unsigned int length)
   {
     std::string moisture_topic = plant.GetName() + "/moisture";
     client.publish(moisture_topic.c_str(), std::to_string(plant.GetSoilMoisture()).c_str());
+    std::string test = std::to_string(plant.GetTemperature());
+    Serial.println(test.c_str());
   }
 }
 
