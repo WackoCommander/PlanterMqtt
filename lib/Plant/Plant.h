@@ -12,6 +12,7 @@ public:
     std::string GetName();
     int GetSoilMoisture();
     int GetTemperature();
+    int GetHumidity();
 protected:
     std::string name_;
 private:
@@ -19,4 +20,5 @@ private:
     int moisture_;
     DHT* dht_;
     int temperature_;
+    int humidity_;
 };

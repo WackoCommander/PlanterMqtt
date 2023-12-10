@@ -113,9 +113,11 @@ void Callback(char* topic, byte* payload, unsigned int length)
   {
     std::string moisture_topic = plant.GetName() + "/moisture";
     std::string temperature_topic = plant.GetName() + "/temperature";
+    std::string humidity_topic = plant.GetName() + "/humidity";
     client.publish(moisture_topic.c_str(), std::to_string(plant.GetSoilMoisture()).c_str());
     client.publish(temperature_topic.c_str(), std::to_string(plant.GetTemperature()).c_str());
-    std::string test = std::to_string(plant.GetTemperature());
+    client.publish(humidity_topic.c_str(), std::to_string(plant.GetHumidity()).c_str());
+    std::string test = std::to_string(plant.GetHumidity());
     Serial.println(test.c_str());
   }
 }
@@ -127,3 +129,21 @@ void UpdateSensors()
     plant.GetSoilMoisture();
   }
 }
+
+// boolean CheckMqttConnection()
+// {
+//   if (client.connected())
+//   {
+//     Serial.println("Lost connection to Mqtt Server...");
+//     Serial.println("Attempting reconnection...");
+//     if (!ConnectMqtt("Plant Hub", MQTT_SERVER, MQTT_PORT, MQTT_USER, MQTT_PASSWRD))
+//     {
+//       Serial.println("Connection to MQTT server successful...");
+//     } 
+//     else
+//     {
+//       Serial.println("Connection to MQTT server timed out...");
+//     }
+//   }
+//   return 0;
+// }

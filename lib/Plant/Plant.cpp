@@ -37,8 +37,19 @@ int Plant::GetTemperature()
     temperature_ = dht_->readTemperature();
     std::string msg = "Temperature: " + std::to_string(temperature_);
     Serial.println(msg.c_str());
+    // digitalWrite(13, LOW);
     return temperature_;
-    digitalWrite(13, LOW);
+}
+
+int Plant::GetHumidity()
+{
+    digitalWrite(13,HIGH);
+    delay(10);
+    humidity_ = dht_->readHumidity();
+    std::string msg = "Humidity: " + std::to_string(humidity_);
+    Serial.println(msg.c_str());
+    // digitalWrite(13, LOW);
+    return humidity_;
 }
 
 std::string Plant::GetName()
